@@ -12,6 +12,7 @@ protected:
     FlashMemoryDevice* m_hardware;
 
 private:
-    int readDevice5Times(long address);
-    int values[5];
+    int readFromDevice(long address);
+    void throwWhenSomeReadValueDifferent(int  values[5]);
+    void readFromDevice5Times(int values[5], long address);
 };

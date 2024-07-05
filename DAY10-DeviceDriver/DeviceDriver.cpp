@@ -1,33 +1,46 @@
+#include <iostream>
+
 #include "DeviceDriver.h"
+
+using std::cout;
+using std::endl;
+
 
 DeviceDriver::DeviceDriver(FlashMemoryDevice* hardware) : m_hardware(hardware)
 {}
 
 int DeviceDriver::read(long address)
 {
-    // TODO: implement this method properly
-    int result = readDevice5Times(address);
+	// TODO: implement this method properly
+	int result = readFromDevice(address);
 
-    return result;
+	return result;
 }
 
-int DeviceDriver::readDevice5Times(long address)
+int DeviceDriver::readFromDevice(long address)
 {
-    int values[] = {-1, -1, -1, -1, -1};
-    for (int i = 0; i < 5; ++i)
-        values[i] = (int)(m_hardware->read(address));
+	int readValues[] = { -1, -1, -1, -1, -1 };
+	readFromDevice5Times(readValues, address);
 
-    for (int i = 0; i < 5 - 1; ++i) {
-        if (values[i] != values[i + 1]) {
-            // exception
-        }
-    }
+	throwWhenSomeReadValueDifferent(readValues);
 
-    return values[0];
+	return readValues[0];
+}
+void DeviceDriver::readFromDevice5Times(int readValues[5], long address) {
+	for (int i = 0; i < 5; ++i)
+		readValues[i] = (int)(m_hardware->read(address));
+}
+void DeviceDriver::throwWhenSomeReadValueDifferent(int readValues[5])
+{
+	for (int i = 0; i < 5 - 1; ++i) {
+		if (readValues[i] != readValues[i + 1]) {
+			throw std::runtime_error("read value error.");
+		}
+	}
 }
 
 void DeviceDriver::write(long address, int data)
 {
-    // TODO: implement this method
-    m_hardware->write(address, (unsigned char)data);
+	// TODO: implement this method
+	m_hardware->write(address, (unsigned char)data);
 }
