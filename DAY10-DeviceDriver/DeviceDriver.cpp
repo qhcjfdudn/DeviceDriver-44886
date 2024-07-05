@@ -5,7 +5,6 @@
 using std::cout;
 using std::endl;
 
-
 DeviceDriver::DeviceDriver(FlashMemoryDevice* hardware) : m_hardware(hardware)
 {}
 
@@ -42,5 +41,8 @@ void DeviceDriver::throwWhenSomeReadValueDifferent(int readValues[5])
 void DeviceDriver::write(long address, int data)
 {
 	// TODO: implement this method
+	// read 1ȸ
+	int readValue = (int)(m_hardware->read(address));
+
 	m_hardware->write(address, (unsigned char)data);
 }
