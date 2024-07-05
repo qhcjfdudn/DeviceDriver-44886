@@ -11,13 +11,32 @@ public:
 	MOCK_METHOD(void, write, (long address, unsigned char data), (override));
 };
 
-TEST(DeviceDriver, 장치는_반드시_5회_read_수행) {
+class DeviceDriverFixture :public testing::Test {
+public:
 	MockFlashMemory mk;
 	DeviceDriver d{ &mk };
+};
+
+TEST_F(DeviceDriverFixture, 장치는_반드시_5회_read_수행) {
+	//arrage
+	EXPECT_CALL(mk, read)
+		.Times(5);
+
+	//action
+	d.read(0x00);
+
+	//assert
+}
+TEST_F(DeviceDriverFixture, 5회_모두_같은_값일_때_리턴) {
+	//arrage
+	const int DUMMY_VALUE = 10;
 
 	EXPECT_CALL(mk, read)
-		.Times(5)
-		.WillRepeatedly(Return(10));
+		.WillRepeatedly(Return(DUMMY_VALUE));
 
-	EXPECT_EQ(10, d.read(0x00));
+	//action
+	int actual = d.read(0x00);
+
+	//assert
+	EXPECT_EQ(10, actual);
 }

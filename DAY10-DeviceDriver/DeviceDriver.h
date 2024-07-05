@@ -10,4 +10,8 @@ public:
 
 protected:
     FlashMemoryDevice* m_hardware;
+
+private:
+    int readDevice5Times(long address);
+    int values[5];
 };
