@@ -30,6 +30,7 @@ TEST_F(DeviceDriverFixture, write_장치는_반드시_5회_read_수행) {
 	d.read(0x00);
 
 	//assert
+	//PASS
 }
 TEST_F(DeviceDriverFixture, write_5회_모두_같은_값일_때_리턴) {
 	//arrage
@@ -58,6 +59,20 @@ TEST_F(DeviceDriverFixture, write_read_1회_호출하는가) {
 	EXPECT_CALL(mk, read)
 		.Times(1)
 		.WillRepeatedly(Return(DEFAULT_VALUE));
+
+	//action
+	d.write(0x00, DEFAULT_VALUE);
+
+	//assert
+	// PASS
+}
+TEST_F(DeviceDriverFixture, write_read_비어_있으면_쓰기_실행) {
+	//arrage
+	EXPECT_CALL(mk, read)
+		.WillRepeatedly(Return(EMPTY_VALUE));
+
+	EXPECT_CALL(mk, write)
+		.Times(1);
 
 	//action
 	d.write(0x00, DEFAULT_VALUE);

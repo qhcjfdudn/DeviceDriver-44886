@@ -44,5 +44,8 @@ void DeviceDriver::write(long address, int data)
 	// read 1ȸ
 	int readValue = (int)(m_hardware->read(address));
 
-	m_hardware->write(address, (unsigned char)data);
+	if (readValue == READ_EMPTY_VALUE) {
+		m_hardware->write(address, (unsigned char)data);
+	}
+
 }
