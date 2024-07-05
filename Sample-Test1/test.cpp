@@ -1,4 +1,4 @@
-#include "gmock/gmock.h"
+ï»¿#include "gmock/gmock.h"
 
 #include "../DAY10-DeviceDriver/DeviceDriver.cpp"
 #include "../DAY10-DeviceDriver/FlashMemoryDevice.h"
@@ -11,7 +11,7 @@ public:
 	MOCK_METHOD(void, write, (long address, unsigned char data), (override));
 };
 
-TEST(DeviceDriver, ÀåÄ¡´Â_¹Ýµå½Ã_5È¸_read_¼öÇà) {
+TEST(DeviceDriver, ìž¥ì¹˜ëŠ”_ë°˜ë“œì‹œ_5íšŒ_read_ìˆ˜í–‰) {
 	MockFlashMemory mk;
 	DeviceDriver d{ &mk };
 
