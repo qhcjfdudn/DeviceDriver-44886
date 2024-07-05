@@ -5,6 +5,12 @@
 using std::cout;
 using std::endl;
 
+class ReadFailException : public std::exception {};
+
+class WriteFailException : public std::exception {
+
+};
+
 DeviceDriver::DeviceDriver(FlashMemoryDevice* hardware) : m_hardware(hardware)
 {}
 
@@ -31,21 +37,17 @@ void DeviceDriver::readFromDevice5Times(int readValues[5], long address) {
 }
 void DeviceDriver::throwWhenSomeReadValueDifferent(int readValues[5])
 {
-	for (int i = 0; i < 5 - 1; ++i) {
-		if (readValues[i] != readValues[i + 1]) {
-			throw std::runtime_error("read value error.");
-		}
-	}
+	for (int i = 0; i < 5 - 1; ++i)
+		if (readValues[i] != readValues[i + 1])
+			throw ReadFailException();
 }
 
 void DeviceDriver::write(long address, int data)
 {
-	// TODO: implement this method
-	// read 1ȸ
 	int readValue = (int)(m_hardware->read(address));
 
-	if (readValue == READ_EMPTY_VALUE) {
-		m_hardware->write(address, (unsigned char)data);
-	}
+	if (readValue != READ_EMPTY_VALUE)
+		throw WriteFailException();
 
+	m_hardware->write(address, (unsigned char)data);
 }

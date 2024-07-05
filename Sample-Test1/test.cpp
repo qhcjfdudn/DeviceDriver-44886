@@ -21,7 +21,7 @@ public:
 	const int EMPTY_VALUE = 0xFF;
 };
 
-TEST_F(DeviceDriverFixture, write_장치는_반드시_5회_read_수행) {
+TEST_F(DeviceDriverFixture, read_장치는_반드시_5회_read_수행) {
 	//arrage
 	EXPECT_CALL(mk, read)
 		.Times(5);
@@ -32,7 +32,7 @@ TEST_F(DeviceDriverFixture, write_장치는_반드시_5회_read_수행) {
 	//assert
 	//PASS
 }
-TEST_F(DeviceDriverFixture, write_5회_모두_같은_값일_때_리턴) {
+TEST_F(DeviceDriverFixture, read_5회_모두_같은_값일_때_리턴) {
 	//arrage
 
 	EXPECT_CALL(mk, read)
@@ -44,7 +44,7 @@ TEST_F(DeviceDriverFixture, write_5회_모두_같은_값일_때_리턴) {
 	//assert
 	EXPECT_EQ(10, actual);
 }
-TEST_F(DeviceDriverFixture, write_다른_값이_있을_때) {
+TEST_F(DeviceDriverFixture, read_5회_중_다른_값이_있을_때) {
 	//arrage
 	EXPECT_CALL(mk, read)
 		.WillOnce(Return(DIFFERENT_VALUE_FROM_DEFAULT))
@@ -52,23 +52,12 @@ TEST_F(DeviceDriverFixture, write_다른_값이_있을_때) {
 
 	//action
 	//assert
-	EXPECT_THROW(d.read(0x00), std::runtime_error);
-}
-TEST_F(DeviceDriverFixture, write_read_1회_호출하는가) {
-	//arrage
-	EXPECT_CALL(mk, read)
-		.Times(1)
-		.WillRepeatedly(Return(DEFAULT_VALUE));
-
-	//action
-	d.write(0x00, DEFAULT_VALUE);
-
-	//assert
-	// PASS
+	EXPECT_THROW(d.read(0x00), std::exception);
 }
 TEST_F(DeviceDriverFixture, write_read_비어_있으면_쓰기_실행) {
 	//arrage
 	EXPECT_CALL(mk, read)
+		.Times(1)
 		.WillRepeatedly(Return(EMPTY_VALUE));
 
 	EXPECT_CALL(mk, write)
@@ -79,4 +68,18 @@ TEST_F(DeviceDriverFixture, write_read_비어_있으면_쓰기_실행) {
 
 	//assert
 	// PASS
+}
+TEST_F(DeviceDriverFixture, write_read_비어_있지_않으면_exception) {
+	//arrage
+	EXPECT_CALL(mk, read)
+		.WillRepeatedly(Return(DEFAULT_VALUE));
+
+	EXPECT_CALL(mk, write)
+		.Times(0);
+
+	//action
+	//assert
+	EXPECT_THROW({
+		d.write(0x00, DEFAULT_VALUE);
+		}, std::exception);
 }
